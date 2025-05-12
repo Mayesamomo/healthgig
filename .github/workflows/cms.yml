@@ -1,0 +1,59 @@
+name: CMS CI/CD
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'cms/**'
+      - '.github/workflows/cms.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'cms/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: cms/sanity/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./cms/sanity
+      run: npm ci
+    
+    - name: Run ESLint
+      working-directory: ./cms/sanity
+      run: npx eslint .
+  
+  deploy:
+    needs: lint
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: cms/sanity/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./cms/sanity
+      run: npm ci
+    
+    - name: Deploy Sanity Studio
+      working-directory: ./cms/sanity
+      run: npx sanity deploy
+      env:
+        SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}

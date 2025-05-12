@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/healthgig
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+# Configure longer timeouts for development
+server:
+  tomcat:
+    connection-timeout: 120000
+
+# Enable detailed logs in development
+logging:
+  level:
+    com.healthgig.platform: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: INFO
+
+# Use a different JWT secret for development
+app:
+  jwt:
+    secret: 4D6251655468576D5A7134743777217A25432A462D4A614E645267556B587032
+    expiration: 86400000  # 24 hours
