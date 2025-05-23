@@ -165,9 +165,7 @@ When using the seed data, the following test users are available:
 5. CI pipeline will run tests
 6. After approval and merge, CD pipeline will deploy
 
-## Contributing
 
-Contributions are welcome! Please check out our [contributing guidelines](./CONTRIBUTING.md) for details.
 
 ## License
 
